@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { ContentItem } from '../types';
+import { ContentItem, PricingOptionEnum } from '../types';
 import { getPricingOptionLabel } from '../services/api';
 
 interface ContentCardProps {
@@ -11,7 +11,7 @@ interface ContentCardProps {
 const ContentCard: React.FC<ContentCardProps> = ({ item, priority = false }) => {
   const [isHovered, setIsHovered] = useState(false);
   const pricingLabel = getPricingOptionLabel(item.pricingOption, item.price);
-  const isPaid = item.pricingOption === 0;
+  const isPaid = item.pricingOption === PricingOptionEnum.PAID;
 
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
@@ -20,10 +20,9 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, priority = false }) => 
 
   return (
     <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg shadow-gray-900/50">
-      {/* Floating Image Container */}
-      <div className="p-4">
+      <div className="p-2 sm:p-3 md:p-4">
         <div 
-          className="aspect-square relative rounded-lg overflow-hidden shadow-xl shadow-gray-900/60"
+          className="aspect-[3/4] relative rounded-lg overflow-hidden shadow-xl shadow-gray-900/60"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onTouchStart={handleTouchStart}
@@ -40,25 +39,25 @@ const ContentCard: React.FC<ContentCardProps> = ({ item, priority = false }) => 
             priority={priority}
           />
           
-          {/* Overlay on Hover */}
           {isHovered && (
             <div className="absolute inset-0 bg-green-400/10 transition-opacity duration-300" />
           )}
         </div>
       </div>
       
-      {/* Content Container */}
-      <div className="px-4 pb-4 bg-gray-800">
-        <h3 className="text-white text-lg font-medium mb-2 leading-[100%]">
-          {item.title}
-        </h3>
-        <p className="text-gray-400 text-sm mb-3 leading-[100%]">
-          {item.creator}
-        </p>
-        <div className="flex justify-end">
-          <span className={`text-sm font-medium ${
+      <div className="px-2 sm:px-3 md:px-4 pb-2 sm:pb-3 md:pb-4 bg-gray-800">
+        <div className="flex justify-between items-end">
+          <div>
+            <p className="text-gray-300 text-xs mb-1 leading-tight">
+              {item.creator}
+            </p>
+            <h3 className="text-white text-xs font-medium leading-tight">
+              {item.title}
+            </h3>
+          </div>
+          <span className={`text-xs sm:text-sm font-medium ${
             isPaid ? 'text-green-400' : 
-            item.pricingOption === 1 ? 'text-blue-400' : 'text-yellow-400'
+            item.pricingOption === PricingOptionEnum.FREE ? 'text-blue-400' : 'text-yellow-400'
           }`}>
             {pricingLabel}
           </span>

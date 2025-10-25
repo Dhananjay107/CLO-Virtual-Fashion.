@@ -6,12 +6,12 @@ A modern, responsive web application for browsing and filtering virtual fashion 
 
 ## 🚀 Features
 
-### 🔍 **Advanced Search & Filtering**
+### 🔍 **Search & Filtering**
 - **Keyword Search**: Search across creator names and item titles
 - **Pricing Filters**: Filter by Paid, Free, or View Only items
-- **Price Range Slider**: Dual-handle range slider for paid items (0-999)
-- **Sort Options**: Sort by Item Name, Higher Price, or Lower Price
-- **URL Persistence**: All filters persist across page reloads via URL parameters
+- **Price Range Slider**: Interactive slider for paid items (0-999)
+- **Sort Options**: Sort by Relevance, Item Name, Higher Price, or Lower Price
+- **URL Persistence**: All filters persist across page reloads
 
 ### 📱 **Responsive Design**
 - **Mobile-First**: Optimized for all screen sizes
@@ -21,12 +21,11 @@ A modern, responsive web application for browsing and filtering virtual fashion 
 
 ### ♾️ **Infinite Scroll**
 - **Progressive Loading**: Loads 20 items at a time
-- **Smooth UX**: Skeleton loading states
-- **Performance Optimized**: Client-side pagination
+- **Skeleton Loading**: Visual feedback during loading
+- **Client-side Pagination**: No additional API calls
 - **All Items Searchable**: Filters work across all 52 items
 
 ### 🎨 **Interactive Cards**
-- **Floating Image Containers**: Prominent shadows for depth
 - **Hover Effects**: Image zoom on hover/touch
 - **Smooth Animations**: 300ms transitions
 - **Visual Feedback**: Green overlays and scaling effects
@@ -37,7 +36,6 @@ A modern, responsive web application for browsing and filtering virtual fashion 
 - **Styling**: Tailwind CSS
 - **State Management**: Redux Toolkit
 - **Image Optimization**: Next.js Image component
-- **Icons**: Custom SVG icons
 - **API**: RESTful API integration
 
 ## 📦 Installation
@@ -57,15 +55,11 @@ A modern, responsive web application for browsing and filtering virtual fashion 
 2. **Install dependencies**
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
 3. **Start development server**
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
 4. **Open in browser**
@@ -79,7 +73,7 @@ A modern, responsive web application for browsing and filtering virtual fashion 
 CLO/
 ├── components/           # React components
 │   ├── AppWrapper.tsx    # Main app container with URL sync
-│   ├── ContentCard.tsx   # Individual item cards with hover effects
+│   ├── ContentCard.tsx   # Individual item cards
 │   ├── ContentGrid.tsx   # Grid layout with infinite scroll
 │   ├── Header.tsx        # App header with CONNECT logo
 │   ├── SearchAndFilter.tsx # Search and filter controls
@@ -99,21 +93,22 @@ CLO/
 │   └── api.ts           # API calls and data processing
 ├── types/               # TypeScript type definitions
 │   └── index.ts         # Global types
-├── utils/               # Utility functions
+├── utils/               # Utility functions and constants
+│   ├── constants.ts     # Static data and constants
+│   ├── helpers.ts        # Reusable utility functions
 │   └── filterUtils.ts   # Filtering and sorting logic
 └── styles/              # Global styles
-    └── globals.css      # Tailwind CSS imports
+    └── globals.css      # Tailwind CSS imports and custom styles
 ```
 
-## 🎯 Key Features Explained
+## 🎯 Key Features
 
 ### 🔍 **Search & Filter System**
 
 #### Keyword Search
-- Searches across **creator names** and **item titles**
+- Searches across creator names and item titles
 - Case-insensitive matching
 - Real-time filtering as you type
-- Works with all 52 items in the dataset
 
 #### Pricing Options
 - **Paid**: Items with price > $0
@@ -122,62 +117,47 @@ CLO/
 - Multiple selections supported
 
 #### Price Range Filter
-- **Dual-handle slider**: Min and max price selection
-- **Range**: $0 - $999
-- **Validation**: Prevents invalid ranges
-- **Only active**: When "Paid" option is selected
+- Interactive slider with real-time updates
+- Range: $0 - $999
+- Only active when "Paid" option is selected
 
 #### URL Persistence
-All filters are saved in the URL for easy sharing and bookmarking:
+All filters are saved in the URL:
 ```
 /?keyword=jacket&pricing=paid&minPrice=20&maxPrice=100&sort=price-low
 ```
 
-### ♾️ **Infinite Scroll Implementation**
+### ♾️ **Infinite Scroll**
 
 #### How It Works
-1. **Initial Load**: Fetches all 52 items from API
-2. **First Batch**: Displays first 20 items
-3. **Scroll Detection**: Triggers at 500px from bottom
-4. **Load More**: Adds next 20 items
-5. **Continue**: Until all items are displayed
-
-#### Performance Features
-- **Client-side pagination**: No additional API calls
-- **Skeleton loading**: Visual feedback during loading
-- **Smooth transitions**: 300ms delay for better UX
-- **Memory efficient**: Only renders visible items
+1. Initial Load: Fetches all 52 items from API
+2. First Batch: Displays first 20 items
+3. Scroll Detection: Triggers at 500px from bottom
+4. Load More: Adds next 20 items
+5. Continue: Until all items are displayed
 
 ### 🎨 **Interactive Card Design**
 
 #### Visual Effects
-- **Floating containers**: Prominent shadows create depth
-- **Image zoom**: 110% scale on hover/touch
-- **Green overlays**: Subtle tint on interaction
-- **Smooth animations**: All effects use 300ms transitions
-
-#### Responsive Behavior
-- **Desktop**: Mouse hover effects
-- **Mobile**: Touch start/end effects
-- **Tablet**: Both mouse and touch support
+- Image zoom: 110% scale on hover/touch
+- Green overlays: Subtle tint on interaction
+- Smooth animations: All effects use 300ms transitions
 
 ## 🔧 Configuration
 
-### Environment Variables
-Create a `.env.local` file for environment-specific settings:
-```env
-NEXT_PUBLIC_API_URL=https://closet-recruiting-api.azurewebsites.net/api/data
-```
-
-### Customization Options
-
-#### Pagination Size
-Modify `ITEMS_PER_PAGE` in `store/slices/contentSlice.ts`:
+### Constants
+Update values in `utils/constants.ts`:
 ```typescript
-const ITEMS_PER_PAGE = 20; // Change to 10, 30, 50, etc.
+export const PRICE_RANGE = {
+  MIN: 0,
+  MAX: 999
+};
+
+export const SCROLL_THRESHOLD = 500;
+export const LOADING_DELAY = 300;
 ```
 
-#### Image Optimization
+### Image Optimization
 Configure remote image domains in `next.config.ts`:
 ```typescript
 remotePatterns: [
@@ -208,12 +188,6 @@ npm install -g vercel
 vercel
 ```
 
-### Deploy to Netlify
-```bash
-npm run build
-# Upload dist/ folder to Netlify
-```
-
 ## 📊 API Integration
 
 ### Data Structure
@@ -241,16 +215,13 @@ interface ContentItem {
 - **Cards**: Gray (`#1F2937`)
 - **Text**: White (`#FFFFFF`)
 - **Secondary Text**: Gray (`#9CA3AF`)
+- **Checkbox/Slider**: Gray (`#787878`)
 
-### Typography
-- **Headings**: Font weight 500-600
-- **Body**: Font weight 400
-- **Small Text**: Font weight 400, smaller size
-
-### Spacing
-- **Container Padding**: 24px (px-6)
-- **Card Padding**: 16px (p-4)
-- **Grid Gap**: 24px (gap-6)
+### Responsive Breakpoints
+- **Mobile**: Default (0px+)
+- **Small**: `sm:` (640px+)
+- **Medium**: `md:` (768px+)
+- **Large**: `lg:` (1024px+)
 
 ## 🐛 Troubleshooting
 
@@ -259,22 +230,14 @@ interface ContentItem {
 #### Images Not Loading
 - Check `next.config.ts` for correct remote patterns
 - Verify image URLs are accessible
-- Check browser console for CORS errors
 
 #### Filters Not Persisting
 - Ensure URL parameters are properly formatted
 - Check browser console for JavaScript errors
-- Verify Redux state is updating correctly
 
 #### Infinite Scroll Not Working
 - Check if `hasMore` state is correct
 - Verify scroll event listeners are attached
-- Check for JavaScript errors in console
-
-### Performance Issues
-- Reduce `ITEMS_PER_PAGE` for slower devices
-- Check image sizes and optimization
-- Monitor Redux state updates
 
 ## 🤝 Contributing
 
@@ -286,7 +249,7 @@ interface ContentItem {
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ## 🙏 Acknowledgments
 
@@ -294,10 +257,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Next.js Team**: For the amazing framework
 - **Tailwind CSS**: For the utility-first CSS framework
 - **Redux Toolkit**: For state management
-
-## 📞 Support
-
-For support, email support@clo-set.com or create an issue in the repository.
 
 ---
 

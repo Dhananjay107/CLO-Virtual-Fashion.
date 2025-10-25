@@ -25,14 +25,12 @@ const contentSlice = createSlice({
     setAllItems: (state, action: PayloadAction<ContentItem[]>) => {
       state.allItems = action.payload;
       state.filteredItems = action.payload;
-      // Load first page
       state.items = action.payload.slice(0, state.itemsPerPage);
       state.page = 1;
       state.hasMore = action.payload.length > state.itemsPerPage;
     },
     setFilteredItems: (state, action: PayloadAction<ContentItem[]>) => {
       state.filteredItems = action.payload;
-      // Reset to page 1 with new filtered results
       state.items = action.payload.slice(0, state.itemsPerPage);
       state.page = 1;
       state.hasMore = action.payload.length > state.itemsPerPage;
@@ -40,7 +38,6 @@ const contentSlice = createSlice({
     loadMoreItems: (state) => {
       const startIndex = state.page * state.itemsPerPage;
       const endIndex = startIndex + state.itemsPerPage;
-      // Load from filtered items, not all items
       const newItems = state.filteredItems.slice(startIndex, endIndex);
       
       if (newItems.length > 0) {

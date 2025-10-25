@@ -1,4 +1,4 @@
-import { ContentItem, PricingOption, SortOption } from '../types';
+import { ContentItem, PricingOption, SortOption, PricingOptionEnum } from '../types';
 
 const API_URL = 'https://closet-recruiting-api.azurewebsites.net/api/data';
 
@@ -8,7 +8,6 @@ export const fetchContentData = async (): Promise<ContentItem[]> => {
     const data: ContentItem[] = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching data:', error);
     return [];
   }
 };
@@ -22,7 +21,6 @@ export const filterAndSortContent = (
 ): ContentItem[] => {
   let filteredItems = items;
 
-  // Filter by keyword
   if (keyword.trim()) {
     const searchTerm = keyword.toLowerCase();
     filteredItems = filteredItems.filter(item =>
@@ -31,7 +29,6 @@ export const filterAndSortContent = (
     );
   }
 
-  // Filter by pricing options
   if (pricingOptions.length > 0) {
     filteredItems = filteredItems.filter(item => {
       const itemPricingType = getPricingOptionType(item.pricingOption);
@@ -39,20 +36,19 @@ export const filterAndSortContent = (
     });
   }
 
-  // Filter by price (only for paid items and only when paid is selected)
   if (pricingOptions.includes('paid')) {
     filteredItems = filteredItems.filter(item => {
-      if (item.pricingOption === 0) { // Paid items
-        // Show items from the selected price and higher
+      if (item.pricingOption === PricingOptionEnum.PAID) {
         return item.price >= priceRange.min;
       }
-      return true; // Non-paid items are not affected by price filter
+      return true;
     });
   }
 
-  // Sort items
   const sortedItems = [...filteredItems].sort((a, b) => {
     switch (sortBy) {
+      case 'relevance':
+        return 0;
       case 'name':
         return a.title.localeCompare(b.title);
       case 'price-high':
@@ -69,24 +65,24 @@ export const filterAndSortContent = (
 
 export const getPricingOptionLabel = (pricingOption: number, price: number): string => {
   switch (pricingOption) {
-    case 0:
+    case PricingOptionEnum.PAID:
       return `$${price.toFixed(2)}`;
-    case 1:
+    case PricingOptionEnum.FREE:
       return 'FREE';
-    case 2:
+    case PricingOptionEnum.VIEW_ONLY:
       return 'View Only';
     default:
       return 'Unknown';
   }
 };
 
-export const getPricingOptionType = (pricingOption: number): 'paid' | 'free' | 'viewOnly' => {
+export const getPricingOptionType = (pricingOption: number): PricingOption => {
   switch (pricingOption) {
-    case 0:
+    case PricingOptionEnum.PAID:
       return 'paid';
-    case 1:
+    case PricingOptionEnum.FREE:
       return 'free';
-    case 2:
+    case PricingOptionEnum.VIEW_ONLY:
       return 'viewOnly';
     default:
       return 'viewOnly';

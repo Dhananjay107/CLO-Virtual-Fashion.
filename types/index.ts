@@ -2,14 +2,20 @@ export interface ContentItem {
   id: string;
   creator: string;
   title: string;
-  pricingOption: number; // 0: Paid, 1: Free, 2: View Only
+  pricingOption: number;
   imagePath: string;
   price: number;
 }
 
 export type PricingOption = 'paid' | 'free' | 'viewOnly';
 
-export type SortOption = 'name' | 'price-high' | 'price-low';
+export enum PricingOptionEnum {
+  PAID = 0,
+  FREE = 1,
+  VIEW_ONLY = 2,
+}
+
+export type SortOption = 'relevance' | 'name' | 'price-high' | 'price-low';
 
 export interface FilterState {
   keyword: string;

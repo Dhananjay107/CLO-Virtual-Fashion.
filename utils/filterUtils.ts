@@ -1,4 +1,4 @@
-import { ContentItem, PricingOption, SortOption } from '../types';
+import { ContentItem, PricingOption, SortOption, PricingOptionEnum } from '../types';
 import { getPricingOptionType } from '../services/api';
 
 export const filterItems = (
@@ -8,7 +8,6 @@ export const filterItems = (
   priceRange: { min: number; max: number }
 ): ContentItem[] => {
   return items.filter(item => {
-    // Filter by pricing options
     if (pricingOptions.length > 0) {
       const itemPricingType = getPricingOptionType(item.pricingOption);
       if (!pricingOptions.includes(itemPricingType)) {
@@ -16,7 +15,6 @@ export const filterItems = (
       }
     }
 
-    // Filter by keyword (search in title and creator)
     if (keyword.trim()) {
       const searchTerm = keyword.toLowerCase();
       const matchesTitle = item.title.toLowerCase().includes(searchTerm);
@@ -26,9 +24,7 @@ export const filterItems = (
       }
     }
 
-    // Filter by price (only for paid items and only when paid is selected)
-    if (pricingOptions.includes('paid') && item.pricingOption === 0) {
-      // Show items from the selected price and higher
+    if (pricingOptions.includes('paid') && item.pricingOption === PricingOptionEnum.PAID) {
       if (item.price < priceRange.min) {
         return false;
       }
@@ -42,6 +38,8 @@ export const sortItems = (items: ContentItem[], sortBy: SortOption): ContentItem
   const sortedItems = [...items];
   
   switch (sortBy) {
+    case 'relevance':
+      return sortedItems;
     case 'name':
       return sortedItems.sort((a, b) => a.title.localeCompare(b.title));
     case 'price-high':

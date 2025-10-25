@@ -5,7 +5,7 @@ const initialState: FilterState = {
   keyword: '',
   pricingOptions: [],
   priceRange: { min: 0, max: 999 },
-  sortBy: 'name',
+  sortBy: 'relevance',
   isPriceSliderActive: false,
 };
 
@@ -39,7 +39,7 @@ const filterSlice = createSlice({
       state.keyword = '';
       state.pricingOptions = [];
       state.priceRange = { min: 0, max: 999 };
-      state.sortBy = 'name';
+      state.sortBy = 'relevance';
       state.isPriceSliderActive = false;
     },
   },
