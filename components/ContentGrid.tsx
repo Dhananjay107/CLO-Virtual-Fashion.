@@ -83,7 +83,6 @@ const ContentGrid: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
-
   return (
     <div className="px-6 py-0 bg-gray-900">
       <div className="flex justify-between items-center mb-2">

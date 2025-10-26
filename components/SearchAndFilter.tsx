@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { PricingOption } from '../types';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -22,33 +22,33 @@ const SearchAndFilter: React.FC = () => {
   const sortBy = useAppSelector((state) => state.filter.sortBy);
 
   useEffect(() => {
-    if (router.isReady) {
-      const query: Record<string, string> = {};
-      
-      if (keyword.trim()) {
-        query.keyword = keyword.trim();
-      }
-      if (pricingOptions.length > 0) {
-        query.pricing = pricingOptions.join(',');
-      }
-      if (priceRange.min !== PRICE_RANGE.MIN) {
-        query.minPrice = priceRange.min.toString();
-      }
-      if (priceRange.max !== PRICE_RANGE.MAX) {
-        query.maxPrice = priceRange.max.toString();
-      }
-      if (sortBy !== 'relevance') {
-        query.sort = sortBy;
-      }
-      
-      const currentQuery = new URLSearchParams(window.location.search);
-      const newQuery = new URLSearchParams(query);
-      
-      if (currentQuery.toString() !== newQuery.toString()) {
-        router.push({ pathname: router.pathname, query }, undefined, { shallow: true });
-      }
+    if (!router.isReady) return;
+    
+    const query: Record<string, string> = {};
+    
+    if (keyword.trim()) {
+      query.keyword = keyword.trim();
     }
-  }, [keyword, pricingOptions, priceRange, sortBy, router.isReady, router.pathname]);
+    if (pricingOptions.length > 0) {
+      query.pricing = pricingOptions.join(',');
+    }
+    if (priceRange.min !== PRICE_RANGE.MIN) {
+      query.minPrice = priceRange.min.toString();
+    }
+    if (priceRange.max !== PRICE_RANGE.MAX) {
+      query.maxPrice = priceRange.max.toString();
+    }
+    if (sortBy !== 'relevance') {
+      query.sort = sortBy;
+    }
+    
+    const currentQuery = new URLSearchParams(window.location.search);
+    const newQuery = new URLSearchParams(query);
+    
+    if (currentQuery.toString() !== newQuery.toString()) {
+      router.push({ pathname: router.pathname, query }, undefined, { shallow: true });
+    }
+  }, [keyword, pricingOptions, priceRange, sortBy, router.isReady, router.pathname, router]);
 
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setKeyword(e.target.value));
@@ -58,10 +58,10 @@ const SearchAndFilter: React.FC = () => {
     dispatch(togglePricingOption(option));
   };
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     dispatch(resetFilters());
     router.push({ pathname: router.pathname }, undefined, { shallow: true });
-  };
+  }, [dispatch, router]);
 
   const handlePriceRangeChange = (type: 'min' | 'max', value: number) => {
     dispatch(setPriceRange({ ...priceRange, [type]: value }));

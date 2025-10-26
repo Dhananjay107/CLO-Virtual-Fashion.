@@ -32,7 +32,7 @@ A modern, responsive web application for browsing and filtering virtual fashion 
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 14 with TypeScript
+- **Framework**: Next.js 15.5.6 with TypeScript
 - **Styling**: Tailwind CSS
 - **State Management**: Redux Toolkit
 - **Image Optimization**: Next.js Image component
@@ -41,7 +41,7 @@ A modern, responsive web application for browsing and filtering virtual fashion 
 ## 📦 Installation
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js v20.19.5
 - npm or yarn
 
 ### Setup
@@ -78,6 +78,9 @@ CLO/
 │   ├── Header.tsx        # App header with CONNECT logo
 │   ├── SearchAndFilter.tsx # Search and filter controls
 │   └── SkeletonCard.tsx  # Loading skeleton components
+├── hooks/                # Custom React hooks
+│   ├── useUrlSync.ts     # URL parameter synchronization
+│   └── useContentData.ts # Content data fetching
 ├── pages/               # Next.js pages
 │   ├── _app.tsx         # App configuration
 │   ├── _document.tsx    # Document configuration
@@ -172,7 +175,16 @@ remotePatterns: [
     pathname: '/public/**',
   },
 ]
-```
+
+## 🔄 Custom Hooks
+
+This project uses custom React hooks for better code organization and reusability.
+
+### Hooks
+- **`useUrlSync.ts`**: Synchronizes URL query parameters with Redux filter state
+- **`useContentData.ts`**: Manages content data fetching and loading state
+
+These hooks are used in `AppWrapper` component to separate concerns and keep the component focused on rendering.
 
 ## 🚀 Deployment
 
@@ -182,11 +194,27 @@ npm run build
 npm start
 ```
 
-### Deploy to Vercel
+### Deploy to Netlify
+
+#### Option 1: Netlify CLI
 ```bash
-npm install -g vercel
-vercel
+npm install -g netlify-cli
+netlify deploy
+netlify deploy --prod
 ```
+
+#### Option 2: GitHub Integration (Recommended)
+1. Push your code to GitHub
+2. Go to [Netlify](https://www.netlify.com) and sign up/login
+3. Click "New site from Git"
+4. Choose your repository
+5. Netlify will auto-detect the settings from `netlify.toml`
+6. Click "Deploy site"
+
+#### Option 3: Manual Deploy
+1. Build the project: `npm run build`
+2. Deploy the `.next` folder to Netlify
+3. Set up continuous deployment from your Git repository
 
 ## 📊 API Integration
 
