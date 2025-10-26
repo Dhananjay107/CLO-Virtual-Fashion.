@@ -94,7 +94,7 @@ const ContentGrid: React.FC = () => {
             <div className="relative inline-block dropdown-container">
               <button 
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="bg-transparent text-gray-300 px-3 py-1 border-b border-gray-500 hover:text-white focus:outline-none focus:border-gray-400 flex items-center space-x-2 min-w-[120px]"
+                className="cursor-pointer bg-transparent text-gray-300 px-3 py-1 border-b border-gray-500 hover:text-white focus:outline-none focus:border-gray-400 flex items-center space-x-2 min-w-[120px]"
               >
                 <span className="text-left flex-1">{getCurrentSortLabelValue()}</span>
                 <svg 
@@ -118,7 +118,7 @@ const ContentGrid: React.FC = () => {
                       <button
                         key={option.value}
                         onClick={() => handleSortSelect(option.value)}
-                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-700 transition-colors ${
+                        className={`cursor-pointer w-full text-left px-4 py-2 text-sm hover:bg-gray-700 transition-colors ${
                           isFirst ? 'rounded-t-lg' : ''
                         } ${isLast ? 'rounded-b-lg' : ''} ${
                           isActive ? 'bg-green-400 text-white' : 'text-white'

@@ -79,7 +79,7 @@ const SearchAndFilter: React.FC = () => {
             className="w-full px-3 sm:px-4 md:px-5 py-3 sm:py-4 md:py-5 bg-gray-800 text-white placeholder-gray-400 border border-gray-700 rounded-lg focus:outline-none focus:border-green-400 text-sm sm:text-base"
           />
           <div className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2">
-            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="cursor-pointer w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
@@ -108,7 +108,7 @@ const SearchAndFilter: React.FC = () => {
                           className="w-4 h-4 rounded focus:ring-green-400 focus:ring-2 opacity-0 absolute"
                         />
                         <div 
-                          className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                          className={`w-4 h-4 rounded border-2 flex items-center justify-center cursor-pointer ${
                             pricingOptions.includes(key) 
                               ? 'bg-gray-500 border-gray-500' 
                               : 'bg-transparent border-gray-500'
@@ -121,7 +121,7 @@ const SearchAndFilter: React.FC = () => {
                           )}
                         </div>
                       </div>
-                      <span className="text-sm" style={{ color: '#787878' }}>{label}</span>
+                      <span className="cursor-pointer text-sm" style={{ color: '#787878' }}>{label}</span>
                     </label>
                   ))}
                 </div>
@@ -172,7 +172,7 @@ const SearchAndFilter: React.FC = () => {
             </div>
             <button
               onClick={handleReset}
-              className="text-green-400 text-sm font-medium hover:text-green-300 transition-colors self-start lg:self-auto"
+              className="cursor-pointer text-green-400 text-sm font-medium hover:text-green-300 transition-colors self-start lg:self-auto"
             >
               RESET
             </button>
